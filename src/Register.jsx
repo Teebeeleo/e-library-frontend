@@ -5,6 +5,8 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { FiCheckCircle } from "react-icons/fi";
 
+const LEVELS = ["100L", "200L", "300L", "400L", "500L"];
+
 export default function Register({ setView }) {
   const [success, setSuccess] = useState(false);
 
@@ -12,7 +14,7 @@ export default function Register({ setView }) {
     name:     yup.string().required("Full name is required").min(2, "At least 2 characters").trim(),
     email:    yup.string().email("Please enter a valid email").required("Email is required").trim().lowercase(),
     password: yup.string().required("Password is required").min(6, "At least 6 characters").max(12, "Max 12 characters"),
-    level:    yup.string().required("Level is required").trim(),
+    level:    yup.string().required("Please select your level").oneOf(LEVELS, "Invalid level"),
   });
 
   const formik = useFormik({
@@ -30,13 +32,6 @@ export default function Register({ setView }) {
       }
     },
   });
-
-  const fields = [
-    { label: "Full Name", name: "name",     type: "text",     placeholder: "Jane Doe"          },
-    { label: "Email",     name: "email",    type: "email",    placeholder: "you@example.com"   },
-    { label: "Password",  name: "password", type: "password", placeholder: "Min. 6 characters" },
-    { label: "Level",     name: "level",    type: "text",     placeholder: "e.g. Stake 3"      },
-  ];
 
   // Success screen
   if (success) {
@@ -85,25 +80,78 @@ export default function Register({ setView }) {
           )}
 
           <div className="space-y-4">
-            {fields.map(({ label, name, type, placeholder }) => (
-              <div key={name}>
-                <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-2">
-                  {label}
-                </label>
-                <input
-                  type={type}
-                  name={name}
-                  placeholder={placeholder}
-                  className="w-full text-black border border-gray-300 placeholder-zinc-400 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0a062] focus:border-[#c0a062] transition"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  value={formik.values[name]}
-                />
-                {formik.touched[name] && formik.errors[name] && (
-                  <p className="text-red-500 text-xs mt-1">{formik.errors[name]}</p>
-                )}
-              </div>
-            ))}
+
+            {/* Name */}
+            <div>
+              <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-2">Full Name</label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Jane Doe"
+                className="w-full text-black border border-gray-300  rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0a062] transition"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+              />
+              {formik.touched.name && formik.errors.name && (
+                <p className="text-red-500 text-xs mt-1">{formik.errors.name}</p>
+              )}
+            </div>
+
+            {/* Email */}
+            <div>
+              <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-2">Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                className="w-full text-black border border-gray-300  rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0a062]  transition"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+              />
+              {formik.touched.email && formik.errors.email && (
+                <p className="text-red-500 text-xs mt-1">{formik.errors.email}</p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-2">Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Min. 6 characters"
+                className="w-full text-black border border-gray-300  rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0a062]  transition"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.password}
+              />
+              {formik.touched.password && formik.errors.password && (
+                <p className="text-red-500 text-xs mt-1">{formik.errors.password}</p>
+              )}
+            </div>
+
+            {/* Level — dropdown */}
+            <div>
+              <label className="block text-zinc-400 text-xs font-semibold uppercase tracking-wider mb-2">Academic Level</label>
+              <select
+                name="level"
+                className="w-full text-black border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#c0a062]  transition bg-white"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.level}
+              >
+                <option value="">Select your level…</option>
+                {LEVELS.map((l) => (
+                  <option key={l} value={l}>{l}</option>
+                ))}
+              </select>
+              {formik.touched.level && formik.errors.level && (
+                <p className="text-red-500 text-xs mt-1">{formik.errors.level}</p>
+              )}
+            </div>
+
           </div>
 
           <button

@@ -1,9 +1,9 @@
 // ============================================================
 //  api.js — All backend calls
-//  Change API url to your Render URL when deployed
+//  Change API to your Render URL when deployed
 // ============================================================
 
-const API = "https://e-library-backend-m3ei.onrender.com";
+const API = "http://localhost:5000";
 
 // AUTH -------------------------------------------------------
 
@@ -41,11 +41,19 @@ export async function fetchBooks() {
   return res.json();
 }
 
-export async function addBook(userId, title, author, category, pdfUrl, available) {
+export async function addBook(userId, title, author, category, pdfUrl, coverUrl, available) {
   const res = await fetch(`${API}/books`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ userId, title, author, category, pdf_url: pdfUrl, available }),
+    body: JSON.stringify({
+      userId,
+      title,
+      author,
+      category,
+      pdf_url:   pdfUrl,
+      cover_url: coverUrl,
+      available,
+    }),
   });
   return res.json();
 }

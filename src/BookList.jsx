@@ -6,7 +6,6 @@ import { IoSearchSharp } from "react-icons/io5";
 import { FiHeart, FiTrash2, FiDownload } from "react-icons/fi";
 
 export default function BookList({ books, setBooks, user, logout }) {
-  const allBooks = books;
   const CATEGORIES = ["All", "100L", "200L", "300L", "400L", "500L"];
 
   const [page, setPage] = useState("books");
@@ -16,7 +15,7 @@ export default function BookList({ books, setBooks, user, logout }) {
   const [favorites, setFavorites] = useState(new Set());
   const [loadingFav, setLoadingFav] = useState(null);
 
-  const filtered = allBooks.filter((b) => {
+  const filtered = books.filter((b) => {
     const matchSearch =
       b.title.toLowerCase().includes(search.toLowerCase()) ||
       b.author.toLowerCase().includes(search.toLowerCase());
@@ -68,21 +67,24 @@ export default function BookList({ books, setBooks, user, logout }) {
 
       {page === "books" && (
         <main className="max-w-6xl mx-auto px-6 py-8">
+          {/* Search */}
           <div className="relative mb-5">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
               <IoSearchSharp />
             </span>
             <input
               placeholder="Search by title or author…"
-              className="w-full bg-white border border-gray-200 text-gray-700 placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent shadow-sm transition"
+              className="w-full bg-white border border-gray-200  placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500  shadow-sm transition"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
 
+          {/* Level filters */}
           <div className="flex gap-2 flex-wrap mb-6">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
                   activeCategory === cat
@@ -95,16 +97,23 @@ export default function BookList({ books, setBooks, user, logout }) {
             ))}
           </div>
 
+          {/* Count */}
           <p className="text-gray-500 text-sm mb-5">
             Showing{" "}
             <span className="font-bold text-gray-800">{filtered.length}</span>{" "}
             {filtered.length === 1 ? "book" : "books"}
           </p>
 
+          {/* Empty state */}
           {filtered.length === 0 ? (
             <div className="text-center py-24">
               <p className="text-5xl mb-4">📭</p>
-              <p className="text-gray-400">No books found.</p>
+              <p className="text-gray-400 font-medium">No books found.</p>
+              <p className="text-gray-300 text-sm mt-1">
+                {books.length === 0
+                  ? "The admin has not added any books yet."
+                  : "Try a different search or filter."}
+              </p>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -113,11 +122,22 @@ export default function BookList({ books, setBooks, user, logout }) {
                   key={book._id}
                   className="bg-white border border-gray-100 rounded-2xl p-5 flex gap-4 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <div className="w-16 h-20 bg-teal-500 rounded-lg flex items-center justify-center shrink-0 shadow">
-                    <span className="text-white text-xs font-bold tracking-wide">
-                      BOOK
-                    </span>
-                  </div>
+                  {/* Book cover */}
+                  {book.cover_url ? (
+                    <img
+                      src={book.cover_url}
+                      alt={book.title}
+                      className="w-16 h-20 object-cover rounded-lg shrink-0 shadow border border-gray-100"
+                    />
+                  ) : (
+                    <div className="w-16 h-20 bg-teal-500 rounded-lg flex items-center justify-center shrink-0 shadow">
+                      <span className="text-white text-xs font-bold tracking-wide text-center leading-tight px-1">
+                        BOOK
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Book details */}
                   <div className="flex-1 min-w-0">
                     <h3 className="text-gray-900 font-semibold text-sm leading-snug truncate">
                       {book.title}
@@ -130,6 +150,8 @@ export default function BookList({ books, setBooks, user, logout }) {
                       {book.year && book.category && <span> • </span>}
                       {book.category && <span>{book.category}</span>}
                     </p>
+
+                    {/* Available badge */}
                     <span
                       className={`inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full ${
                         book.available > 0
@@ -139,8 +161,11 @@ export default function BookList({ books, setBooks, user, logout }) {
                     >
                       {book.available > 0 ? "Available" : "Unavailable"}
                     </span>
+
+                    {/* Actions */}
                     <div className="flex items-center gap-3 mt-3">
                       <button
+                        type="button"
                         onClick={() => handleDownload(book)}
                         disabled={downloading === book._id || !book.pdf_url}
                         className="flex items-center gap-1 text-xs text-teal-600 hover:text-teal-800 disabled:opacity-40 disabled:cursor-not-allowed font-medium transition-colors"
@@ -148,7 +173,9 @@ export default function BookList({ books, setBooks, user, logout }) {
                         <FiDownload size={13} />
                         {downloading === book._id ? "Opening…" : "Download"}
                       </button>
+
                       <button
+                        type="button"
                         onClick={() => handleFavorite(book._id)}
                         disabled={
                           favorites.has(book._id) || loadingFav === book._id
@@ -162,8 +189,10 @@ export default function BookList({ books, setBooks, user, logout }) {
                         <FiHeart size={13} />
                         {favorites.has(book._id) ? "Saved" : "Favorite"}
                       </button>
+
                       {user.role === "admin" && (
                         <button
+                          type="button"
                           onClick={() => handleDelete(book)}
                           className="flex items-center gap-1 text-xs text-gray-400 hover:text-red-500 font-medium transition-colors ml-auto"
                         >
