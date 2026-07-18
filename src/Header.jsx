@@ -28,7 +28,8 @@ export default function Header({ user, logout, page, setPage }) {
           </div>
           <button
             onClick={logout}
-            className="flex items-center gap-1.5 text-gray-400 hover:text-red-500 text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:border-red-200 transition-colors"
+
+            className=" cursor-pointer flex items-center gap-1.5 text-gray-400 hover:text-red-500 text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:border-red-200 transition-colors"
           >
             <FiLogOut size={14} /> Sign out
           </button>
@@ -39,7 +40,7 @@ export default function Header({ user, logout, page, setPage }) {
           <div className="flex items-center gap-1 bg-gray-100 rounded-xl p-1 ">
             <button
               onClick={() => setPage("books")}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={`flex cursor-pointer items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 page === "books"
                   ? "bg-white text-gray-900 shadow-sm"
                   : "text-gray-500 hover:text-gray-700"
@@ -49,7 +50,7 @@ export default function Header({ user, logout, page, setPage }) {
             </button>
             <button
               onClick={() => setPage("favorites")}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+              className={` cursor-pointer flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                 page === "favorites"
                   ? "bg-white text-gray-900 shadow-sm"
                   : "text-gray-500 hover:text-gray-700"

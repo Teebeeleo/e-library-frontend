@@ -3,6 +3,7 @@ import { downloadBook, addFavorite, deleteBook } from "./api";
 import Header from "./Header";
 import FavoritesPage from "./FavoritesPage";
 import { IoSearchSharp } from "react-icons/io5";
+import { MdImageNotSupported } from "react-icons/md";
 import { FiHeart, FiTrash2, FiDownload } from "react-icons/fi";
 
 export default function BookList({ books, setBooks, user, logout }) {
@@ -74,7 +75,7 @@ export default function BookList({ books, setBooks, user, logout }) {
             </span>
             <input
               placeholder="Search by title or author…"
-              className="w-full bg-white border border-gray-200  placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500  shadow-sm transition"
+              className="w-full  bg-white border border-gray-200  placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#beab85]  shadow-sm transition"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
@@ -86,10 +87,10 @@ export default function BookList({ books, setBooks, user, logout }) {
                 key={cat}
                 type="button"
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                className={`px-4 py-1.5 cursor-pointer rounded-full text-sm font-medium transition-colors border ${
                   activeCategory === cat
-                    ? "bg-teal-600 border-teal-600 text-white"
-                    : "bg-white border-gray-200 text-gray-600 hover:border-teal-400 hover:text-teal-600"
+                    ? "bg-[#beab85] border-[#beab85] text-white"
+                    : "bg-white border-gray-200 text-gray-600 hover:border-[#beab85] hover:text-[#beab85]"
                 }`}
               >
                 {cat}
@@ -107,7 +108,7 @@ export default function BookList({ books, setBooks, user, logout }) {
           {/* Empty state */}
           {filtered.length === 0 ? (
             <div className="text-center py-24">
-              <p className="text-5xl mb-4">📭</p>
+              <p className="text-5xl mb-4 flex justify-center"><MdImageNotSupported /></p>
               <p className="text-gray-400 font-medium">No books found.</p>
               <p className="text-gray-300 text-sm mt-1">
                 {books.length === 0

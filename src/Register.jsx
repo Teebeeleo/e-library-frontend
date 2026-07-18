@@ -48,7 +48,7 @@ export default function Register({ setView }) {
             <button
               type="button"
               onClick={() => setView("login")}
-              className="mt-6 w-full bg-[#c0a062] hover:bg-[#b18f4f] text-white font-bold py-3 rounded-xl text-sm transition-colors"
+              className="mt-6 cursor-pointer w-full bg-[#c0a062] hover:bg-[#b18f4f] text-white font-bold py-3 rounded-xl text-sm transition-colors"
             >
               Go to Login Now
             </button>
@@ -158,7 +158,7 @@ export default function Register({ setView }) {
             type="button"
             onClick={formik.handleSubmit}
             disabled={formik.isSubmitting}
-            className="w-full mt-6 bg-[#c0a062] hover:bg-[#b18f4f] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl text-sm transition-colors"
+            className="w-full mt-6 bg-[#c0a062] hover:bg-[#b18f4f] disabled:opacity-50 cursor-pointer text-white font-bold py-3 rounded-xl text-sm transition-colors"
           >
             {formik.isSubmitting ? "Creating account…" : "Create Account"}
           </button>
@@ -168,7 +168,7 @@ export default function Register({ setView }) {
             <button
               type="button"
               onClick={() => setView("login")}
-              className="text-[#c0a062] hover:text-[#b18f4f] font-semibold transition-colors"
+              className="text-[#c0a062] hover:text-[#b18f4f] font-semibold cursor-pointer transition-colors"
             >
               Sign in
             </button>

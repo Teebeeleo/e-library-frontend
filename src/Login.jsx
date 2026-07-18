@@ -87,7 +87,7 @@ export default function Login({ setUser, setView }) {
                 <button
                   type="button"
                   onClick={() => setView("forgot")}
-                  className="text-xs text-[#c0a062] hover:text-[#b18f4f] font-medium transition-colors"
+                  className="text-xs cursor-pointer text-[#c0a062] hover:text-[#b18f4f] font-medium transition-colors"
                 >
                   Forgot password?
                 </button>
@@ -113,7 +113,7 @@ export default function Login({ setUser, setView }) {
             type="button"
             onClick={formik.handleSubmit}
             disabled={formik.isSubmitting}
-            className="w-full mt-6 bg-[#c0a062] hover:bg-[#b18f4f] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl text-sm transition-colors"
+            className="w-full cursor-pointer mt-6 bg-[#c0a062] hover:bg-[#b18f4f]  disabled:opacity-50  text-white font-bold py-3 rounded-xl text-sm transition-colors"
           >
             {formik.isSubmitting ? "Logging in…" : "Log in to Library"}
           </button>
@@ -123,7 +123,7 @@ export default function Login({ setUser, setView }) {
             <button
               type="button"
               onClick={() => setView("register")}
-              className="text-[#c0a062] hover:text-[#b18f4f] font-semibold transition-colors"
+              className="text-[#c0a062] hover:text-[#b18f4f] font-semibold cursor-pointer transition-colors"
             >
               Create one
             </button>

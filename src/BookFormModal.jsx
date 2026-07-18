@@ -8,24 +8,26 @@ const LEVELS = ["100L", "200L", "300L", "400L", "500L"];
 
 export default function BookFormModal({ close, user, setBooks, existingBook }) {
   const isEdit = !!existingBook;
-  const [coverPreview, setCoverPreview] = useState(existingBook?.cover_url || "");
+  const [coverPreview, setCoverPreview] = useState(
+    existingBook?.cover_url || "",
+  );
   const [uploadingCover, setUploadingCover] = useState(false);
 
   const formSchema = yup.object({
-    title:     yup.string().required("Title is required"),
-    author:    yup.string().required("Author is required"),
-    category:  yup.string().required("Please select a level"),
-    pdf_url:   yup.string().url("Must be a valid URL").nullable(),
+    title: yup.string().required("Title is required"),
+    author: yup.string().required("Author is required"),
+    category: yup.string().required("Please select a level"),
+    pdf_url: yup.string().url("Must be a valid URL").nullable(),
     cover_url: yup.string().nullable(),
     available: yup.number().min(0, "Cannot be negative").required("Required"),
   });
 
   const formik = useFormik({
     initialValues: {
-      title:     existingBook?.title     || "",
-      author:    existingBook?.author    || "",
-      category:  existingBook?.category  || "",
-      pdf_url:   existingBook?.pdf_url   || "",
+      title: existingBook?.title || "",
+      author: existingBook?.author || "",
+      category: existingBook?.category || "",
+      pdf_url: existingBook?.pdf_url || "",
       cover_url: existingBook?.cover_url || "",
       available: existingBook?.available ?? 1,
     },
@@ -43,7 +45,7 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
             values.category,
             values.pdf_url,
             values.cover_url,
-            Number(values.available)
+            Number(values.available),
           );
         }
         const updated = await fetchBooks();
@@ -61,7 +63,8 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
   async function handleCoverUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith("image/")) return alert("Please select an image file.");
+    if (!file.type.startsWith("image/"))
+      return alert("Please select an image file.");
     if (file.size > 2 * 1024 * 1024) return alert("Image must be under 2MB.");
 
     setUploadingCover(true);
@@ -86,7 +89,6 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
       onClick={(e) => e.target === e.currentTarget && close()}
     >
       <div className="bg-white rounded-2xl p-7 w-full max-w-md shadow-2xl my-auto">
-
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-gray-900 font-bold text-lg">
@@ -108,7 +110,6 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
         )}
 
         <div className="space-y-4">
-
           {/* Book Cover Upload */}
           <div>
             <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
@@ -130,12 +131,16 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
                 </button>
               </div>
             ) : (
-              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-teal-400 hover:bg-teal-50/30 transition-colors">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-[#beab85] hover:bg-teal-50/30 transition-colors">
                 <FiUpload className="text-gray-400 mb-2" size={20} />
                 <span className="text-gray-400 text-xs font-medium">
-                  {uploadingCover ? "Uploading…" : "Click to upload cover image"}
+                  {uploadingCover
+                    ? "Uploading…"
+                    : "Click to upload cover image"}
                 </span>
-                <span className="text-gray-300 text-xs mt-1">PNG, JPG up to 2MB</span>
+                <span className="text-gray-300 text-xs mt-1">
+                  PNG, JPG up to 2MB
+                </span>
                 <input
                   type="file"
                   accept="image/*"
@@ -148,12 +153,14 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
 
           {/* Title */}
           <div>
-            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Title</label>
+            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
+              Title
+            </label>
             <input
               type="text"
               name="title"
               placeholder="Book title"
-              className="w-full border border-teal-500  placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-teal-500  transition"
+              className="w-full border border-[#beab85]  placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#beab85]  transition"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.title}
@@ -165,36 +172,48 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
 
           {/* Author */}
           <div>
-            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Author</label>
+            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
+              Author
+            </label>
             <input
               type="text"
               name="author"
               placeholder="Author name"
-              className="w-full border border-teal-500  placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-teal-500  transition"
+              className="w-full border border-[#beab85]  placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#beab85]  transition"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.author}
             />
             {formik.touched.author && formik.errors.author && (
-              <p className="text-red-500 text-xs mt-1">{formik.errors.author}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formik.errors.author}
+              </p>
             )}
           </div>
 
           {/* Level dropdown */}
           <div>
-            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Level</label>
+            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
+              Level
+            </label>
             <select
               name="category"
-              className="w-full border  text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition bg-white"
+              className="w-full border border-[#beab85]  text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#beab85] transition bg-white"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.category}
             >
               <option value="">Select level…</option>
-              {LEVELS.map((l) => <option key={l} value={l}>{l}</option>)}
+              {LEVELS.map((l) => (
+                <option key={l} value={l}>
+                  {l}
+                </option>
+              ))}
             </select>
             {formik.touched.category && formik.errors.category && (
-              <p className="text-red-500 text-xs mt-1">{formik.errors.category}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formik.errors.category}
+              </p>
             )}
           </div>
 
@@ -202,42 +221,50 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
           <div>
             <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
               PDF Link
-              <span className="ml-1 text-gray-400 normal-case font-normal">(paste a Google Drive or Cloudinary link)</span>
+              <span className="ml-1 text-gray-400 normal-case font-normal">
+                (paste a Google Drive or Cloudinary link)
+              </span>
             </label>
             <input
               type="text"
               name="pdf_url"
               placeholder="https://drive.google.com/…"
-              className="w-full border   placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-teal-500 focus:border-teal-500 transition"
+              className="w-full border border-[#beab85]   placeholder-gray-400 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#beab85]  transition"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.pdf_url}
             />
             {formik.touched.pdf_url && formik.errors.pdf_url && (
-              <p className="text-red-500 text-xs mt-1">{formik.errors.pdf_url}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formik.errors.pdf_url}
+              </p>
             )}
             <p className="text-gray-400 text-xs mt-1">
-              Upload your PDF to Google Drive, set sharing to "Anyone with link", then paste the link here.
+              Upload your PDF to Google Drive, set sharing to "Anyone with
+              link", then paste the link here.
             </p>
           </div>
 
           {/* Available copies */}
           <div>
-            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">Available Copies</label>
+            <label className="block text-gray-500 text-xs font-semibold uppercase tracking-wider mb-2">
+              Available Copies
+            </label>
             <input
               type="number"
               name="available"
               min={0}
-              className="w-full border border-gray-300 text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-teal-500  transition"
+              className="w-full border border-[#beab85] text-gray-900 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-[#beab85]  transition"
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.available}
             />
             {formik.touched.available && formik.errors.available && (
-              <p className="text-red-500 text-xs mt-1">{formik.errors.available}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {formik.errors.available}
+              </p>
             )}
           </div>
-
         </div>
 
         {/* Buttons */}
@@ -245,7 +272,7 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
           <button
             type="button"
             onClick={close}
-            className="flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors"
+            className=" cursor-pointer flex-1 py-2.5 rounded-xl border border-gray-300 text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors"
           >
             Cancel
           </button>
@@ -253,9 +280,13 @@ export default function BookFormModal({ close, user, setBooks, existingBook }) {
             type="button"
             onClick={formik.handleSubmit}
             disabled={formik.isSubmitting}
-            className="flex-1 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-400 disabled:opacity-50 text-white text-sm font-bold transition-colors"
+            className=" cursor-pointer flex-1 py-2.5 rounded-xl bg-[#beab85] hover:bg-[#C0A062] disabled:opacity-50 text-white text-sm font-bold transition-colors"
           >
-            {formik.isSubmitting ? "Saving…" : isEdit ? "Save Changes" : "Add Book"}
+            {formik.isSubmitting
+              ? "Saving…"
+              : isEdit
+                ? "Save Changes"
+                : "Add Book"}
           </button>
         </div>
       </div>

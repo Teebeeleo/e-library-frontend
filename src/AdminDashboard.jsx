@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import BookFormModal from "./BookFormModal";
+import { IoBookSharp } from "react-icons/io5";
+import { FaRegUser } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
+import { MdImageNotSupported } from "react-icons/md";
+import { IoSearch } from "react-icons/io5";
+import { MdModeEditOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import { fetchBooks, fetchStats, fetchStudents, deleteBook } from "./api";
 
 export default function AdminDashboard({ user, logout }) {
@@ -57,9 +64,9 @@ export default function AdminDashboard({ user, logout }) {
   );
 
   const statCards = [
-    { label: "Total Students", value: stats.users, icon: "👤" },
-    { label: "Total Books", value: stats.books, icon: "📚" },
-    { label: "Downloads", value: stats.downloads, icon: "⬇" },
+    { label: "Total Students", value: stats.users, icon: <FaRegUser /> },
+    { label: "Total Books", value: stats.books, icon: <IoBookSharp /> },
+    { label: "Downloads", value: stats.downloads, icon: <FaDownload /> },
   ];
 
   return (
@@ -77,13 +84,13 @@ export default function AdminDashboard({ user, logout }) {
         </div>
 
         {/* Stat cards */}
-        <div className="grid grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-3 gap-4 mb-8 text-center">
           {statCards.map(({ label, value, icon }) => (
             <div
               key={label}
-              className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm"
+              className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm  "
             >
-              <p className="text-2xl mb-3">{icon}</p>
+              <p className="text-2xl mb-3 flex justify-center ">{icon}</p>
               <p className="text-3xl font-bold text-gray-900">
                 {loading ? "—" : (value ?? 0)}
               </p>
@@ -97,24 +104,29 @@ export default function AdminDashboard({ user, logout }) {
           <button
             type="button"
             onClick={() => setActiveTab("books")}
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={` cursor-pointer px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "books"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            📚 Books
+            <p className=" flex gap-2 items-center">
+              <IoBookSharp /> Books
+            </p>
           </button>
           <button
             type="button"
             onClick={() => setActiveTab("students")}
-            className={`px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
+            className={` cursor-pointer  px-5 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === "students"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            👤 Students {students.length > 0 && `(${students.length})`}
+            <p className=" flex gap-2 items-center">
+              <FaRegUser /> Students{" "}
+              {students.length > 0 && `(${students.length})`}
+            </p>
           </button>
         </div>
 
@@ -124,18 +136,18 @@ export default function AdminDashboard({ user, logout }) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-gray-100">
               <div className="relative flex-1 max-w-xs">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                  🔍
+                  <IoSearch size={16} />
                 </span>
                 <input
                   placeholder="Search books…"
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-teal-500 transition"
+                  className="w-full bg-gray-50 border border-[#beab85] text-gray-700 rounded-xl pl-8 pr-4 py-2 text-sm focus:outline-[#C0A062]  transition"
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
               <button
                 type="button"
                 onClick={() => setModal("add")}
-                className="bg-teal-500 hover:bg-teal-400 text-white font-bold px-5 py-2 rounded-xl text-sm transition-colors whitespace-nowrap"
+                className="bg-[#beab85] hover:bg-[#C0A062] cursor-pointer text-white font-bold px-5 py-2 rounded-xl text-sm transition-colors whitespace-nowrap"
               >
                 + Add Book
               </button>
@@ -146,8 +158,10 @@ export default function AdminDashboard({ user, logout }) {
                 Loading books…
               </div>
             ) : filteredBooks.length === 0 ? (
-              <div className="p-10 text-center text-gray-400">
-                <p className="text-3xl mb-2">📭</p>
+              <div className="p-10 flex justify-center items-center text-center text-gray-400">
+                <p className="text-3xl ">
+                  <MdImageNotSupported />
+                </p>
                 <p>No books found.</p>
               </div>
             ) : (
@@ -219,17 +233,20 @@ export default function AdminDashboard({ user, logout }) {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               type="button"
+                              
                               onClick={() => setModal(book)}
-                              className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition-colors"
+                              className="text-xs cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition-colors"
                             >
-                              ✏️ Edit
+                              <p className="flex gap-2 items-center"><MdModeEditOutline size={16} /> Edit</p>
+                            
                             </button>
                             <button
                               type="button"
                               onClick={() => handleDelete(book)}
                               className="text-xs bg-red-50 hover:bg-red-100 text-red-500 px-3 py-1.5 rounded-lg transition-colors"
                             >
-                              🗑 Delete
+                              <p className="flex gap-2 items-center"><MdDeleteOutline size={16}/> Delete</p>
+                              
                             </button>
                           </div>
                         </td>
@@ -248,11 +265,11 @@ export default function AdminDashboard({ user, logout }) {
             <div className="flex items-center justify-between gap-3 p-5 border-b border-gray-100">
               <div className="relative flex-1 max-w-xs">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">
-                  🔍
+                  <IoSearch size={16} />
                 </span>
                 <input
                   placeholder="Search by name, email or level…"
-                  className="w-full bg-gray-50 border border-gray-200 text-gray-700 rounded-xl pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-teal-500 transition"
+                  className="w-full bg-gray-50 border border-[#beab85] text-gray-700 rounded-xl pl-8 pr-4 py-2 text-sm focus:outline-none focus:border-[#beab85] transition"
                   onChange={(e) => setStudentSearch(e.target.value)}
                 />
               </div>
@@ -298,7 +315,7 @@ export default function AdminDashboard({ user, logout }) {
                       >
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-teal-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-[#beab85] flex items-center justify-center text-white text-xs font-bold shrink-0">
                               {student.name?.charAt(0).toUpperCase()}
                             </div>
                             <span className="text-gray-900 font-medium">
