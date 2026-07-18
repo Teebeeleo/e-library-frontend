@@ -90,7 +90,7 @@ export default function AdminDashboard({ user, logout }) {
               key={label}
               className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm  "
             >
-              <p className="text-2xl mb-3 flex justify-center ">{icon}</p>
+              <p className="text-2xl mb-3 flex justify-center text-[#beab85] ">{icon}</p>
               <p className="text-3xl font-bold text-gray-900">
                 {loading ? "—" : (value ?? 0)}
               </p>
@@ -111,7 +111,7 @@ export default function AdminDashboard({ user, logout }) {
             }`}
           >
             <p className=" flex gap-2 items-center">
-              <IoBookSharp /> Books
+              <IoBookSharp   />Books
             </p>
           </button>
           <button

@@ -22,13 +22,16 @@ export default function Header({ user, logout, page, setPage }) {
             <p className="text-gray-900 text-sm font-semibold leading-tight">
               {user.name || user.email}
             </p>
-            <p className="text-gray-400 text-xs">
-              {user.level ? `Level: ${user.level}` : user.role}
+            <p className="text-gray-400 text-xs capitalize">
+              {user.role === "admin"
+                ? "Administrator"
+                : user.level
+                  ? `Level: ${user.level}`
+                  : "Student"}
             </p>
           </div>
           <button
             onClick={logout}
-
             className=" cursor-pointer flex items-center gap-1.5 text-gray-400 hover:text-red-500 text-sm px-3 py-1.5 rounded-lg border border-gray-200 hover:border-red-200 transition-colors"
           >
             <FiLogOut size={14} /> Sign out
