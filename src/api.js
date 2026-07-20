@@ -34,6 +34,26 @@ export async function resetPassword(email, newPassword) {
   return res.json();
 }
 
+// PROFILE ----------------------------------------------------
+
+export async function updateProfile(userId, fields) {
+  const res = await fetch(`${API}/users/${userId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(fields),
+  });
+  return res.json();
+}
+
+export async function changePassword(userId, currentPassword, newPassword) {
+  const res = await fetch(`${API}/users/${userId}/change-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ currentPassword, newPassword }),
+  });
+  return res.json();
+}
+
 // BOOKS ------------------------------------------------------
 
 export async function fetchBooks() {
@@ -95,6 +115,20 @@ export async function downloadBook(userId, bookId) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ userId, bookId }),
+  });
+  return res.json();
+}
+
+// NOTIFICATIONS ----------------------------------------------
+
+export async function fetchNotifications(userId) {
+  const res = await fetch(`${API}/notifications/${userId}`);
+  return res.json();
+}
+
+export async function markNotificationRead(notifId) {
+  const res = await fetch(`${API}/notifications/${notifId}/read`, {
+    method: "PUT",
   });
   return res.json();
 }

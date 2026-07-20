@@ -5,7 +5,7 @@ import Register from "./Register";
 import ForgotPassword from "./ForgotPassword";
 import AdminDashboard from "./AdminDashboard";
 import BookList from "./BookList";
-import { fetchBooks } from "./api";
+import { fetchBooks, fetchNotifications } from "./api";
 
 export default function App() {
   const [user, setUser] = useState(() => {
@@ -14,21 +14,37 @@ export default function App() {
   });
 
   // landing | login | register | forgot
-  const [view, setView] = useState("landing");
-  const [books, setBooks] = useState([]);
+  const [view, setView]               = useState("landing");
+  const [books, setBooks]             = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   function logout() {
     localStorage.removeItem("user");
     setUser(null);
     setBooks([]);
+    setUnreadCount(0);
     setView("landing");
   }
 
+  // Load books for regular users
   useEffect(() => {
     if (user && user.role !== "admin") {
       fetchBooks().then((data) => {
         if (Array.isArray(data)) setBooks(data);
       }).catch(() => {});
+    }
+  }, [user]);
+
+  // Load unread notification count
+  useEffect(() => {
+    if (user && user.role !== "admin") {
+      fetchNotifications(user.id)
+        .then((data) => {
+          if (Array.isArray(data)) {
+            setUnreadCount(data.filter((n) => !n.is_read).length);
+          }
+        })
+        .catch(() => {});
     }
   }, [user]);
 
@@ -40,10 +56,20 @@ export default function App() {
     return <LandingPage setView={setView} />;
   }
 
-  // Logged in
+  // Admin
   if (user.role === "admin") {
     return <AdminDashboard user={user} logout={logout} />;
   }
 
-  return <BookList books={books} setBooks={setBooks} user={user} logout={logout} />;
+  // Student
+  return (
+    <BookList
+      books={books}
+      setBooks={setBooks}
+      user={user}
+      setUser={setUser}
+      logout={logout}
+      unreadCount={unreadCount}
+    />
+  );
 }

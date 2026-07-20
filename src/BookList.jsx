@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import { downloadBook, addFavorite, deleteBook } from "./api";
 import Header from "./Header";
 import FavoritesPage from "./FavoritesPage";
+import NotificationsPage from "./NotificationsPage";
+import ProfilePage from "./ProfilePage";
 import { IoSearchSharp } from "react-icons/io5";
 import { MdImageNotSupported } from "react-icons/md";
 import { FiHeart, FiTrash2, FiDownload } from "react-icons/fi";
 
-export default function BookList({ books, setBooks, user, logout }) {
+export default function BookList({ books, setBooks, user, setUser, logout, unreadCount }) {
   const CATEGORIES = ["All", "100L", "200L", "300L", "400L", "500L"];
 
-  const [page, setPage] = useState("books");
-  const [search, setSearch] = useState("");
+  const [page, setPage]                     = useState("books");
+  const [search, setSearch]                 = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
-  const [downloading, setDownloading] = useState(null);
-  const [favorites, setFavorites] = useState(new Set());
-  const [loadingFav, setLoadingFav] = useState(null);
+  const [downloading, setDownloading]       = useState(null);
+  const [favorites, setFavorites]           = useState(new Set());
+  const [loadingFav, setLoadingFav]         = useState(null);
 
   const filtered = books.filter((b) => {
     const matchSearch =
@@ -62,9 +64,17 @@ export default function BookList({ books, setBooks, user, logout }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header user={user} logout={logout} page={page} setPage={setPage} />
+      <Header
+        user={user}
+        logout={logout}
+        page={page}
+        setPage={setPage}
+        unreadCount={unreadCount}
+      />
 
-      {page === "favorites" && <FavoritesPage user={user} />}
+      {page === "favorites"     && <FavoritesPage user={user} />}
+      {page === "notifications" && <NotificationsPage user={user} />}
+      {page === "profile"       && <ProfilePage user={user} setUser={setUser} />}
 
       {page === "books" && (
         <main className="max-w-6xl mx-auto px-6 py-8">
@@ -75,7 +85,7 @@ export default function BookList({ books, setBooks, user, logout }) {
             </span>
             <input
               placeholder="Search by title or author…"
-              className="w-full  bg-white border border-gray-200  placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#beab85]  shadow-sm transition"
+              className="w-full bg-white border border-gray-200 placeholder-gray-400 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#beab85] shadow-sm transition"
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
@@ -143,27 +153,21 @@ export default function BookList({ books, setBooks, user, logout }) {
                     <h3 className="text-gray-900 font-semibold text-sm leading-snug truncate">
                       {book.title}
                     </h3>
-                    <p className="text-gray-500 text-xs mt-0.5">
-                      by {book.author}
-                    </p>
+                    <p className="text-gray-500 text-xs mt-0.5">by {book.author}</p>
                     <p className="text-gray-400 text-xs mt-0.5">
                       {book.year && <span>{book.year}</span>}
                       {book.year && book.category && <span> • </span>}
                       {book.category && <span>{book.category}</span>}
                     </p>
 
-                    {/* Available badge */}
-                    <span
-                      className={`inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full ${
-                        book.available > 0
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-600"
-                      }`}
-                    >
+                    <span className={`inline-block mt-2 text-xs font-semibold px-2.5 py-0.5 rounded-full ${
+                      book.available > 0
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-600"
+                    }`}>
                       {book.available > 0 ? "Available" : "Unavailable"}
                     </span>
 
-                    {/* Actions */}
                     <div className="flex items-center gap-3 mt-3">
                       <button
                         type="button"
@@ -178,9 +182,7 @@ export default function BookList({ books, setBooks, user, logout }) {
                       <button
                         type="button"
                         onClick={() => handleFavorite(book._id)}
-                        disabled={
-                          favorites.has(book._id) || loadingFav === book._id
-                        }
+                        disabled={favorites.has(book._id) || loadingFav === book._id}
                         className={`flex items-center gap-1 text-xs font-medium transition-colors ${
                           favorites.has(book._id)
                             ? "text-red-500 cursor-default"
